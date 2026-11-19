@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>智测精构</title>
+    <style>  
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+  <header>
+    <nav aria-label="主导航">
+      <a href="#home" aria-label="返回首页">点云检测系统</a>
+
+      <ul>
+        <li><a href="#features">系统功能</a></li>
+        <li><a href="#workflow">检测流程</a></li>
+        <li><a href="#technology">技术方案</a></li>
+        <li><a href="#progress">项目进展</a></li>
+      </ul>
+
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+        GitHub
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" aria-labelledby="hero-title">
+      <p>开源技术驱动 · 面向复杂构件检测</p>
+      <h1 id="hero-title">复杂构件三维点云尺寸检测系统</h1>
+      <p>
+        基于激光扫描点云，探索从数据预处理、几何特征提取到尺寸偏差分析的检测流程，
+        让测量结果更直观、可复核、可追溯。
+      </p>
+
+      <p>
+        <a href="#workflow">了解检测流程</a>
+        <a href="#technology">查看技术方案</a>
+      </p>
+
+      <figure>
+        <img
+          src="https://pointclouds.org/assets/images/overview/keypoints_small.png"
+          alt="复杂构件点云与几何特征检测效果示意图"
+          width="960"
+          height="540"
+        />
+        <figcaption>检测效果示意图。</figcaption>
+      </figure>
+    </section>
+
+    <section id="features" aria-labelledby="features-title">
+      <h2 id="features-title">系统功能</h2>
+      <p>围绕点云检测任务，逐步构建从数据导入到结果输出的处理能力。</p>
+
+      <div>
+        <article>
+          <h3>点云数据导入</h3>
+          <p>支持规划导入 PLY、PCD、XYZ 等常见点云文件，并统一坐标与单位。</p>
+          <p><small>计划功能</small></p>
+        </article>
+
+        <article>
+          <h3>预处理与配准</h3>
+          <p>通过滤波、下采样和多视角配准，准备后续分析所需的点云数据。</p>
+          <p><small>计划功能</small></p>
+        </article>
+
+        <article>
+          <h3>几何特征分析</h3>
+          <p>分割局部结构，并尝试拟合平面、圆柱等基础几何特征。</p>
+          <p><small>计划功能</small></p>
+        </article>
+
+        <article>
+          <h3>尺寸与偏差分析</h3>
+          <p>计算距离、角度、直径等参数，并与参考值进行对比。</p>
+          <p><small>计划功能</small></p>
+        </article>
+
+        <article>
+          <h3>结果展示与报告</h3>
+          <p>在三维视图中展示特征和测量结果，并逐步完善任务记录与报告导出。</p>
+          <p><small>计划功能</small></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="workflow" aria-labelledby="workflow-title">
+      <h2 id="workflow-title">检测流程</h2>
+      <p>系统按链式流程组织点云处理与尺寸分析。</p>
+
+      <ol>
+        <li>
+          <h3>数据采集</h3>
+          <p>采集扫描数据，或导入离线点云文件。</p>
+        </li>
+        <li>
+          <h3>预处理</h3>
+          <p>去除离群点、下采样，并估计后续分析需要的几何信息。</p>
+        </li>
+        <li>
+          <h3>配准与分割</h3>
+          <p>对齐多视角点云，按局部区域或几何特征划分点云。</p>
+        </li>
+        <li>
+          <h3>几何拟合</h3>
+          <p>拟合目标几何特征，并记录拟合参数和残差信息。</p>
+        </li>
+        <li>
+          <h3>尺寸分析</h3>
+          <p>计算空间尺寸及其相对参考值的偏差。</p>
+        </li>
+        <li>
+          <h3>结果输出</h3>
+          <p>展示检测结果，并为结果复核和报告生成保留记录。</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="technology" aria-labelledby="technology-title">
+      <h2 id="technology-title">开源技术方案</h2>
+      <p>
+        项目计划基于现有开源工具进行二次开发。以下链接用于了解相关技术；
+        实际集成前请确认许可证、依赖和适用范围。
+      </p>
+
+      <div>
+        <article>
+          <h3>Open3D</h3>
+          <p>用于点云处理、配准、几何分析和可视化原型开发。</p>
+          <a href="https://github.com/isl-org/Open3D"
+             target="_blank" rel="noopener noreferrer">
+            查看 Open3D GitHub
+          </a>
+        </article>
+
+        <article>
+          <h3>Point Cloud Library（PCL）</h3>
+          <p>提供 C++ 点云处理组件，可用于滤波、分割、配准等算法开发。</p>
+          <a href="https://github.com/PointCloudLibrary/pcl"
+             target="_blank" rel="noopener noreferrer">
+            查看 PCL GitHub
+          </a>
+        </article>
+
+        <article>
+          <h3>pyRANSAC-3D</h3>
+          <p>可用于探索平面、圆柱、球等几何基元的 RANSAC 拟合。</p>
+          <a href="https://github.com/leomariga/pyRANSAC-3D"
+             target="_blank" rel="noopener noreferrer">
+            查看 pyRANSAC-3D GitHub
+          </a>
+        </article>
+
+        <article>
+          <h3>TEASER++</h3>
+          <p>可评估用于点云鲁棒配准的方案，需结合数据特点进行验证。</p>
+          <a href="https://github.com/MIT-SPARK/TEASER-plusplus"
+             target="_blank" rel="noopener noreferrer">
+            查看 TEASER++ GitHub
+          </a>
+        </article>
+
+        <article>
+          <h3>CloudCompare</h3>
+          <p>可用于点云查看、偏差可视化和算法结果的人工复核。</p>
+          <a href="https://github.com/CloudCompare/CloudCompare"
+             target="_blank" rel="noopener noreferrer">
+            查看 CloudCompare GitHub
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="result-title">
+      <h2 id="result-title">结果展示示意</h2>
+      <p>
+        页面可在此展示点云、拟合几何体、测量标注和偏差色谱。
+        若使用模拟数据，请在图注中明确标注。
+      </p>
+
+      <figure>
+        <img
+          src="assets/inspection-result-demo.png"
+          alt="点云检测结果示意，包括几何拟合和尺寸标注"
+          width="960"
+          height="540"
+        />
+        <figcaption>
+          检测结果示意。示例图片不代表系统已达到特定测量精度。
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="progress" aria-labelledby="progress-title">
+      <h2 id="progress-title">项目进展</h2>
+      <ul>
+        <li><strong>方案规划：</strong>梳理系统流程与开源技术选型。</li>
+        <li><strong>开发中：</strong>根据实际进度更新原型功能。</li>
+        <li><strong>后续计划：</strong>完善检测流程、结果展示和报告输出。</li>
+      </ul>
+      <p><small>请根据项目真实进度更新以上状态。</small></p>
+    </section>
+
+    <section aria-labelledby="contact-title">
+      <h2 id="contact-title">关注项目</h2>
+      <p>查看代码、了解开发进度，或参与问题反馈。</p>
+      <p>
+        <a href="https://github.com/替换为你的用户名/替换为你的仓库名"
+           target="_blank" rel="noopener noreferrer">
+          访问项目 GitHub 仓库
+        </a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>复杂构件三维点云尺寸检测系统</p>
+    <p>
+      本项目基于开源技术进行开发。使用第三方项目时，请遵守各自的许可证和使用条款。
+    </p>
+  </footer>
+</body>
+</html>
