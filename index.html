@@ -1,229 +1,339 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>智测精构</title>
-    <style>  
-      body {
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body>
-  <header>
-    <nav aria-label="主导航">
-      <a href="#home" aria-label="返回首页">点云检测系统</a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>智测精构 · 三维点云检测系统</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(13, 28, 48, 0.82);
+      --surface-strong: #10243b;
+      --line: rgba(126, 211, 255, 0.16);
+      --text: #edf7ff;
+      --muted: #91a7b9;
+      --cyan: #55d9ff;
+      --blue: #4f7cff;
+      --green: #55efbd;
+      --glow: 0 0 32px rgba(85, 217, 255, 0.15);
+      --radius: 18px;
+    }
 
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 78% 8%, rgba(79, 124, 255, 0.14), transparent 28rem),
+        radial-gradient(circle at 12% 42%, rgba(85, 217, 255, 0.08), transparent 24rem),
+        linear-gradient(180deg, #091524 0%, #060d18 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(126, 211, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126, 211, 255, 0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    p { line-height: 1.8; }
+
+    .nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      z-index: 20;
+      width: min(1180px, calc(100% - 32px));
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 18px 0 22px;
+      transform: translateX(-50%);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(7, 17, 31, 0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: 1px; }
+    .brand-mark {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      border: 1px solid rgba(85, 217, 255, 0.5); border-radius: 10px;
+      color: var(--cyan); font-size: 14px;
+      background: linear-gradient(135deg, rgba(85, 217, 255, 0.16), rgba(79, 124, 255, 0.08));
+      box-shadow: var(--glow);
+    }
+    .nav ul { display: flex; gap: 4px; padding: 0; margin: 0; list-style: none; }
+    .nav ul a { display: block; padding: 10px 12px; border-radius: 9px; color: var(--muted); font-size: 14px; transition: .25s ease; }
+    .nav ul a:hover { color: var(--text); background: rgba(85, 217, 255, 0.07); }
+    .nav-action { padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; transition: .25s ease; }
+    .nav-action:hover { border-color: rgba(85, 217, 255, 0.55); background: rgba(85, 217, 255, 0.08); }
+
+    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    section { scroll-margin-top: 110px; }
+
+    #home {
+      min-height: 760px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      align-items: center;
+      gap: 56px;
+      padding-top: 110px;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      margin: 0 0 22px; color: var(--cyan); font-size: 13px;
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+    #home h1 {
+      max-width: 620px;
+      margin: 0 0 24px;
+      font-size: clamp(44px, 6vw, 74px);
+      line-height: 1.06;
+      letter-spacing: -3px;
+      background: linear-gradient(135deg, #fff 18%, #b8eaff 70%, #69a7ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-copy { max-width: 580px; margin: 0 0 32px; color: var(--muted); font-size: 17px; }
+    .actions { display: flex; gap: 12px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 48px; padding: 0 20px; border: 1px solid var(--line); border-radius: 12px;
+      font-size: 14px; font-weight: 700; transition: .25s ease;
+    }
+    .button-primary { color: #051421; border: 0; background: linear-gradient(135deg, var(--cyan), #91baff); box-shadow: 0 10px 30px rgba(85, 217, 255, 0.18); }
+    .button:hover { transform: translateY(-2px); }
+
+    .hero-visual, .demo-visual {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(16, 36, 59, 0.92), rgba(7, 17, 31, 0.92));
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), var(--glow);
+    }
+    .hero-visual::before, .demo-visual::before {
+      content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(120deg, transparent 20%, rgba(85, 217, 255, 0.06) 50%, transparent 70%);
+      transform: translateX(-100%); animation: scan 6s ease-in-out infinite;
+    }
+    @keyframes scan { 55%, 100% { transform: translateX(100%); } }
+    figure { margin: 0; }
+    figure img { display: block; width: 100%; height: auto; opacity: .94; }
+    figcaption { position: relative; z-index: 2; padding: 11px 14px; color: var(--muted); font-size: 12px; background: rgba(5, 13, 23, 0.82); }
+
+    .section-shell { padding: 100px 0; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 38px; }
+    .section-heading h2, .center-heading h2 { margin: 8px 0 12px; font-size: clamp(32px, 4vw, 46px); letter-spacing: -1.5px; }
+    .section-heading p, .center-heading p { max-width: 620px; margin: 0; color: var(--muted); }
+    .section-kicker { color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+    .feature-grid article {
+      grid-column: span 2; min-height: 210px; padding: 26px;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(16, 36, 59, 0.72), rgba(8, 18, 31, 0.72));
+      transition: .25s ease;
+    }
+    .feature-grid article:nth-child(4), .feature-grid article:nth-child(5) { grid-column: span 3; }
+    .feature-grid article:hover { transform: translateY(-5px); border-color: rgba(85, 217, 255, 0.32); box-shadow: var(--glow); }
+    .feature-grid h3 { margin: 18px 0 10px; font-size: 18px; }
+    .feature-grid p { margin: 0; color: var(--muted); font-size: 14px; }
+    .feature-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px; color: var(--cyan); border: 1px solid rgba(85, 217, 255, 0.18); background: rgba(85, 217, 255, 0.06); }
+
+    .workflow-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0; margin: 0; list-style: none; counter-reset: workflow; }
+    .workflow-list li { position: relative; min-height: 180px; padding: 24px; counter-increment: workflow; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(10, 24, 41, 0.65); }
+    .workflow-list li::before { content: "0" counter(workflow); display: block; color: var(--cyan); font-size: 12px; letter-spacing: 2px; }
+    .workflow-list h3 { margin: 28px 0 8px; }
+    .workflow-list p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .tech-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .tech-grid article { min-height: 230px; padding: 22px; border: 1px solid var(--line); border-radius: 15px; background: rgba(10, 24, 41, 0.65); }
+    .tech-grid h3 { min-height: 44px; margin: 0 0 10px; font-size: 16px; }
+    .tech-grid p { min-height: 100px; color: var(--muted); font-size: 13px; }
+    .tech-grid a { color: var(--cyan); font-size: 12px; font-weight: 700; }
+
+    .center-heading { max-width: 760px; margin: 0 auto 36px; text-align: center; }
+    .demo-visual { max-width: 980px; margin: 0 auto; }
+
+    .progress-box { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; padding: 36px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(135deg, rgba(16, 36, 59, .82), rgba(8, 18, 31, .82)); }
+    .progress-box ul { margin: 0; padding: 0; list-style: none; }
+    .progress-box li { padding: 15px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+    .progress-box li:last-child { border: 0; }
+    .progress-box strong { color: var(--text); }
+    .status-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .status-panel div { min-height: 120px; display: flex; flex-direction: column; justify-content: end; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(5, 13, 23, .55); }
+    .status-panel strong { color: var(--green); font-size: 24px; }
+    .status-panel span { margin-top: 5px; color: var(--muted); font-size: 12px; }
+
+    .contact { margin: 20px 0 100px; padding: 50px; text-align: center; border: 1px solid rgba(85, 217, 255, 0.2); border-radius: 24px; background: radial-gradient(circle at 50% 100%, rgba(85, 217, 255, 0.12), transparent 55%), rgba(10, 24, 41, 0.72); }
+    .contact h2 { margin: 0 0 12px; font-size: 36px; }
+    .contact p { color: var(--muted); }
+
+    footer { padding: 30px 20px 38px; border-top: 1px solid var(--line); text-align: center; color: #6f8799; font-size: 12px; }
+
+    @media (max-width: 980px) {
+      .nav ul { display: none; }
+      #home { grid-template-columns: 1fr; min-height: auto; padding: 150px 0 80px; }
+      .hero-visual { max-width: 700px; }
+      .tech-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid article, .feature-grid article:nth-child(4), .feature-grid article:nth-child(5) { grid-column: span 3; }
+      .progress-box { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      main { width: min(100% - 28px, 1180px); }
+      .nav { width: calc(100% - 20px); height: 60px; top: 10px; }
+      .nav-action { display: none; }
+      #home { padding-top: 120px; gap: 38px; }
+      #home h1 { letter-spacing: -2px; }
+      .actions { flex-direction: column; }
+      .section-shell { padding: 72px 0; }
+      .section-heading { display: block; }
+      .feature-grid, .workflow-list, .tech-grid { grid-template-columns: 1fr; }
+      .feature-grid article, .feature-grid article:nth-child(4), .feature-grid article:nth-child(5) { grid-column: auto; }
+      .status-panel { grid-template-columns: 1fr 1fr; }
+      .progress-box, .contact { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#home" aria-label="返回首页">
+        <span class="brand-mark">ZJ</span>
+        <span>智测精构</span>
+      </a>
       <ul>
         <li><a href="#features">系统功能</a></li>
         <li><a href="#workflow">检测流程</a></li>
         <li><a href="#technology">技术方案</a></li>
         <li><a href="#progress">项目进展</a></li>
       </ul>
-
-      <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
-        GitHub
-      </a>
+      <a class="nav-action" href="https://github.com/birrrd-0001/gzl_1" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </nav>
   </header>
 
   <main>
     <section id="home" aria-labelledby="hero-title">
-      <p>开源技术驱动 · 面向复杂构件检测</p>
-      <h1 id="hero-title">复杂构件三维点云尺寸检测系统</h1>
-      <p>
-        基于激光扫描点云，探索从数据预处理、几何特征提取到尺寸偏差分析的检测流程，
-        让测量结果更直观、可复核、可追溯。
-      </p>
-
-      <p>
-        <a href="#workflow">了解检测流程</a>
-        <a href="#technology">查看技术方案</a>
-      </p>
-
-      <figure>
-        <img
-          src="https://pointclouds.org/assets/images/overview/keypoints_small.png"
-          alt="复杂构件点云与几何特征检测效果示意图"
-          width="960"
-          height="540"
-        />
-        <figcaption>检测效果示意图。</figcaption>
+      <div>
+        <p class="eyebrow">Point Cloud Intelligence</p>
+        <h1 id="hero-title">复杂构件三维点云尺寸检测系统</h1>
+        <p class="hero-copy">基于激光扫描点云，探索从数据预处理、几何特征提取到尺寸偏差分析的检测流程，让测量结果更直观、可复核、可追溯。</p>
+        <div class="actions">
+          <a class="button button-primary" href="#workflow">了解检测流程</a>
+          <a class="button" href="#technology">查看技术方案</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="https://pointclouds.org/assets/images/overview/keypoints_small.png" alt="复杂构件点云与几何特征检测效果示意图" width="960" height="540">
+        <figcaption>点云特征识别与几何分析示意</figcaption>
       </figure>
     </section>
 
-    <section id="features" aria-labelledby="features-title">
-      <h2 id="features-title">系统功能</h2>
-      <p>围绕点云检测任务，逐步构建从数据导入到结果输出的处理能力。</p>
-
-      <div>
-        <article>
-          <h3>点云数据导入</h3>
-          <p>支持规划导入 PLY、PCD、XYZ 等常见点云文件，并统一坐标与单位。</p>
-          <p><small>计划功能</small></p>
-        </article>
-
-        <article>
-          <h3>预处理与配准</h3>
-          <p>通过滤波、下采样和多视角配准，准备后续分析所需的点云数据。</p>
-          <p><small>计划功能</small></p>
-        </article>
-
-        <article>
-          <h3>几何特征分析</h3>
-          <p>分割局部结构，并尝试拟合平面、圆柱等基础几何特征。</p>
-          <p><small>计划功能</small></p>
-        </article>
-
-        <article>
-          <h3>尺寸与偏差分析</h3>
-          <p>计算距离、角度、直径等参数，并与参考值进行对比。</p>
-          <p><small>计划功能</small></p>
-        </article>
-
-        <article>
-          <h3>结果展示与报告</h3>
-          <p>在三维视图中展示特征和测量结果，并逐步完善任务记录与报告导出。</p>
-          <p><small>计划功能</small></p>
-        </article>
+    <section id="features" class="section-shell" aria-labelledby="features-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">Capabilities</span>
+          <h2 id="features-title">系统功能</h2>
+        </div>
+        <p>围绕点云检测任务，构建从数据导入到结果输出的完整处理能力。</p>
+      </div>
+      <div class="feature-grid">
+        <article><span class="feature-icon">01</span><h3>点云数据导入</h3><p>支持导入 PLY、PCD、XYZ 等常见点云文件，并统一坐标与单位。</p></article>
+        <article><span class="feature-icon">02</span><h3>预处理与配准</h3><p>通过滤波、下采样和多视角配准，准备后续分析所需的数据。</p></article>
+        <article><span class="feature-icon">03</span><h3>几何特征分析</h3><p>分割局部结构，并拟合平面、圆柱等基础几何特征。</p></article>
+        <article><span class="feature-icon">04</span><h3>尺寸与偏差分析</h3><p>计算距离、角度、直径等参数，并与参考值进行多维对比。</p></article>
+        <article><span class="feature-icon">05</span><h3>结果展示与报告</h3><p>在三维视图中展示特征和测量结果，并逐步完善报告导出。</p></article>
       </div>
     </section>
 
-    <section id="workflow" aria-labelledby="workflow-title">
-      <h2 id="workflow-title">检测流程</h2>
-      <p>系统按链式流程组织点云处理与尺寸分析。</p>
-
-      <ol>
-        <li>
-          <h3>数据采集</h3>
-          <p>采集扫描数据，或导入离线点云文件。</p>
-        </li>
-        <li>
-          <h3>预处理</h3>
-          <p>去除离群点、下采样，并估计后续分析需要的几何信息。</p>
-        </li>
-        <li>
-          <h3>配准与分割</h3>
-          <p>对齐多视角点云，按局部区域或几何特征划分点云。</p>
-        </li>
-        <li>
-          <h3>几何拟合</h3>
-          <p>拟合目标几何特征，并记录拟合参数和残差信息。</p>
-        </li>
-        <li>
-          <h3>尺寸分析</h3>
-          <p>计算空间尺寸及其相对参考值的偏差。</p>
-        </li>
-        <li>
-          <h3>结果输出</h3>
-          <p>展示检测结果，并为结果复核和报告生成保留记录。</p>
-        </li>
+    <section id="workflow" class="section-shell" aria-labelledby="workflow-title">
+      <div class="section-heading">
+        <div><span class="section-kicker">Pipeline</span><h2 id="workflow-title">检测流程</h2></div>
+        <p>系统按链式流程组织点云处理与尺寸分析，确保各环节可复核。</p>
+      </div>
+      <ol class="workflow-list">
+        <li><h3>数据采集</h3><p>采集扫描数据，或导入离线点云文件。</p></li>
+        <li><h3>预处理</h3><p>去除离群点、下采样，并估计几何信息。</p></li>
+        <li><h3>配准与分割</h3><p>对齐多视角点云，划分局部区域或几何特征。</p></li>
+        <li><h3>几何拟合</h3><p>拟合目标几何特征，并记录参数和残差信息。</p></li>
+        <li><h3>尺寸分析</h3><p>计算空间尺寸及其相对参考值的偏差。</p></li>
+        <li><h3>结果输出</h3><p>展示检测结果，为复核和报告生成保留记录。</p></li>
       </ol>
     </section>
 
-    <section id="technology" aria-labelledby="technology-title">
-      <h2 id="technology-title">开源技术方案</h2>
-      <p>
-        项目计划基于现有开源工具进行二次开发。以下链接用于了解相关技术；
-        实际集成前请确认许可证、依赖和适用范围。
-      </p>
-
-      <div>
-        <article>
-          <h3>Open3D</h3>
-          <p>用于点云处理、配准、几何分析和可视化原型开发。</p>
-          <a href="https://github.com/isl-org/Open3D"
-             target="_blank" rel="noopener noreferrer">
-            查看 Open3D GitHub
-          </a>
-        </article>
-
-        <article>
-          <h3>Point Cloud Library（PCL）</h3>
-          <p>提供 C++ 点云处理组件，可用于滤波、分割、配准等算法开发。</p>
-          <a href="https://github.com/PointCloudLibrary/pcl"
-             target="_blank" rel="noopener noreferrer">
-            查看 PCL GitHub
-          </a>
-        </article>
-
-        <article>
-          <h3>pyRANSAC-3D</h3>
-          <p>可用于探索平面、圆柱、球等几何基元的 RANSAC 拟合。</p>
-          <a href="https://github.com/leomariga/pyRANSAC-3D"
-             target="_blank" rel="noopener noreferrer">
-            查看 pyRANSAC-3D GitHub
-          </a>
-        </article>
-
-        <article>
-          <h3>TEASER++</h3>
-          <p>可评估用于点云鲁棒配准的方案，需结合数据特点进行验证。</p>
-          <a href="https://github.com/MIT-SPARK/TEASER-plusplus"
-             target="_blank" rel="noopener noreferrer">
-            查看 TEASER++ GitHub
-          </a>
-        </article>
-
-        <article>
-          <h3>CloudCompare</h3>
-          <p>可用于点云查看、偏差可视化和算法结果的人工复核。</p>
-          <a href="https://github.com/CloudCompare/CloudCompare"
-             target="_blank" rel="noopener noreferrer">
-            查看 CloudCompare GitHub
-          </a>
-        </article>
+    <section id="technology" class="section-shell" aria-labelledby="technology-title">
+      <div class="section-heading">
+        <div><span class="section-kicker">Open Source Stack</span><h2 id="technology-title">开源技术方案</h2></div>
+        <p>基于成熟开源工具构建原型。集成前请确认许可证、依赖和适用范围。</p>
+      </div>
+      <div class="tech-grid">
+        <article><h3>Open3D</h3><p>点云处理、配准、几何分析和可视化原型开发。</p><a href="https://github.com/isl-org/Open3D" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></article>
+        <article><h3>Point Cloud Library</h3><p>提供 C++ 点云组件，用于滤波、分割与配准。</p><a href="https://github.com/PointCloudLibrary/pcl" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></article>
+        <article><h3>pyRANSAC-3D</h3><p>探索平面、圆柱、球等几何基元的 RANSAC 拟合。</p><a href="https://github.com/leomariga/pyRANSAC-3D" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></article>
+        <article><h3>TEASER++</h3><p>评估点云鲁棒配准方案，并结合数据特点验证。</p><a href="https://github.com/MIT-SPARK/TEASER-plusplus" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></article>
+        <article><h3>CloudCompare</h3><p>用于点云查看、偏差可视化及人工结果复核。</p><a href="https://github.com/CloudCompare/CloudCompare" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></article>
       </div>
     </section>
 
-    <section aria-labelledby="result-title">
-      <h2 id="result-title">结果展示示意</h2>
-      <p>
-        页面可在此展示点云、拟合几何体、测量标注和偏差色谱。
-        若使用模拟数据，请在图注中明确标注。
-      </p>
-
-      <figure>
-        <img
-          src="assets/inspection-result-demo.png"
-          alt="点云检测结果示意，包括几何拟合和尺寸标注"
-          width="960"
-          height="540"
-        />
-        <figcaption>
-          检测结果示意。示例图片不代表系统已达到特定测量精度。
-        </figcaption>
+    <section class="section-shell" aria-labelledby="result-title">
+      <div class="center-heading">
+        <span class="section-kicker">Visualization</span>
+        <h2 id="result-title">结果展示示意</h2>
+        <p>展示点云、拟合几何体、测量标注和偏差色谱。示例数据不代表已达到特定测量精度。</p>
+      </div>
+      <figure class="demo-visual">
+        <img src="assets/inspection-result-demo.png" alt="点云检测结果示意，包括几何拟合和尺寸标注" width="960" height="540">
+        <figcaption>检测结果示意 · 几何拟合与尺寸偏差可视化</figcaption>
       </figure>
     </section>
 
-    <section id="progress" aria-labelledby="progress-title">
-      <h2 id="progress-title">项目进展</h2>
-      <ul>
-        <li><strong>方案规划：</strong>梳理系统流程与开源技术选型。</li>
-        <li><strong>开发中：</strong>根据实际进度更新原型功能。</li>
-        <li><strong>后续计划：</strong>完善检测流程、结果展示和报告输出。</li>
-      </ul>
-      <p><small>请根据项目真实进度更新以上状态。</small></p>
+    <section id="progress" class="section-shell" aria-labelledby="progress-title">
+      <div class="progress-box">
+        <div>
+          <span class="section-kicker">Project Progress</span>
+          <h2 id="progress-title">项目进展</h2>
+          <ul>
+            <li><strong>方案规划：</strong>梳理系统流程与开源技术选型。</li>
+            <li><strong>开发中：</strong>根据实际进度持续更新原型功能。</li>
+            <li><strong>后续计划：</strong>完善检测流程、结果展示和报告输出。</li>
+          </ul>
+        </div>
+        <div class="status-panel">
+          <div><strong>6</strong><span>检测流程节点</span></div>
+          <div><strong>5</strong><span>规划功能模块</span></div>
+          <div><strong>5</strong><span>开源技术方案</span></div>
+          <div><strong>1</strong><span>统一系统入口</span></div>
+        </div>
+      </div>
     </section>
 
-    <section aria-labelledby="contact-title">
+    <section class="contact" aria-labelledby="contact-title">
       <h2 id="contact-title">关注项目</h2>
       <p>查看代码、了解开发进度，或参与问题反馈。</p>
-      <p>
-        <a href="https://github.com/替换为你的用户名/替换为你的仓库名"
-           target="_blank" rel="noopener noreferrer">
-          访问项目 GitHub 仓库
-        </a>
-      </p>
+      <a class="button button-primary" href="https://github.com/birrrd-0001/gzl_1" target="_blank" rel="noopener noreferrer">访问项目仓库 ↗</a>
     </section>
   </main>
 
   <footer>
-    <p>复杂构件三维点云尺寸检测系统</p>
-    <p>
-      本项目基于开源技术进行开发。使用第三方项目时，请遵守各自的许可证和使用条款。
-    </p>
+    <p><strong>复杂构件三维点云尺寸检测系统</strong></p>
+    <p>本项目基于开源技术进行开发。使用第三方项目时，请遵守各自许可证和使用条款。</p>
   </footer>
 </body>
 </html>
